@@ -1,10 +1,10 @@
-import { Checkbox, Flex, Text, Icon } from '@chakra-ui/react';
+import { Flex, Icon, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import {
-  RiHeartAddFill,
-  RiHeartAddLine,
   RiCloseCircleFill,
   RiCloseCircleLine,
+  RiHeartAddFill,
+  RiHeartAddLine,
 } from 'react-icons/ri';
 
 interface ChartType {

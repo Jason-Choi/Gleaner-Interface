@@ -1,5 +1,4 @@
 import {
-  AspectRatio,
   Center,
   Divider,
   Flex,
@@ -11,8 +10,8 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { RiDeleteBinLine, RiLineChartLine, RiMore2Fill } from 'react-icons/ri';
-import type { TopLevelSpec as Spec } from 'vega-lite';
 import { VegaLite } from 'react-vega';
+import type { TopLevelSpec as Spec } from 'vega-lite';
 
 interface ChartViewProps {
   spec: Spec;

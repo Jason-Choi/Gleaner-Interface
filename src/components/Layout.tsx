@@ -1,5 +1,4 @@
-import { Collapse, FlexProps } from '@chakra-ui/react';
-import { Button, Divider, Flex, Heading, Icon, Link, Text } from '@chakra-ui/react';
+import { Button, Collapse, Flex, FlexProps, Heading, Icon, Link, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { AiFillGithub } from 'react-icons/ai';
 import { GiShipWheel } from 'react-icons/gi';

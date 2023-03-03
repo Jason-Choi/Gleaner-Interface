@@ -1,5 +1,5 @@
-import { Flex, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text } from '@chakra-ui/react';
 import type { FlexProps } from '@chakra-ui/react';
+import { Flex, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 
 interface WeightSliderProps extends FlexProps {

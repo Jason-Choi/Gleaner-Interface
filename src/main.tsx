@@ -3,8 +3,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
-import 'pretendard/dist/web/variable/pretendardvariable.css';
 import '@fontsource/rajdhani';
+import 'pretendard/dist/web/variable/pretendardvariable.css';
 
 const theme = extendTheme({
   fonts: {

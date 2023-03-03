@@ -1,12 +1,12 @@
-import { Icon, Box, Flex, Text } from '@chakra-ui/react';
+import { Flex, Icon, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import {
-  RiHashtag,
-  RiFontSize,
-  RiKey2Line,
   RiCalendar2Line,
+  RiFontSize,
+  RiHashtag,
   RiHeartAddFill,
   RiHeartAddLine,
+  RiKey2Line,
 } from 'react-icons/ri';
 
 interface AttributeProps {
