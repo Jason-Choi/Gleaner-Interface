@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { AiFillGithub } from 'react-icons/ai';
 import { GiShipWheel } from 'react-icons/gi';
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
+import { useSignal } from '@preact/signals-react';
 
 const Header = () => {
   return (
@@ -55,11 +56,11 @@ interface SectionProps extends FlexProps {
   collapsed?: boolean;
 }
 const Section = (props: SectionProps) => {
-  const [show, setShow] = useState(true);
+  const show = useSignal<boolean | undefined>(!props.collapsed);
 
-  useEffect(() => {
-    setShow(!props.collapsed);
-  }, [props.collapsed]);
+  const toggleShow = () => {
+    show.value = !show.value;
+  };
 
   return (
     <Flex
@@ -74,24 +75,12 @@ const Section = (props: SectionProps) => {
       <Flex flexDir={'row'} justifyContent={'space-between'} alignItems={'center'}>
         <Heading variant={'section'}>{props.title}</Heading>
         {show ? (
-          <Icon
-            as={RiArrowDownSLine}
-            boxSize={4}
-            onClick={() => {
-              setShow(!show);
-            }}
-          />
+          <Icon as={RiArrowDownSLine} boxSize={4} onClick={toggleShow} />
         ) : (
-          <Icon
-            as={RiArrowUpSLine}
-            boxSize={4}
-            onClick={() => {
-              setShow(!show);
-            }}
-          />
+          <Icon as={RiArrowUpSLine} boxSize={4} onClick={toggleShow} />
         )}
       </Flex>
-      <Collapse in={show} animateOpacity>
+      <Collapse in={show.value} animateOpacity>
         <Flex
           flexDir={'column'}
           w="full"

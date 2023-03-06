@@ -1,55 +1,22 @@
-import {
-  Center,
-  Divider,
-  Flex,
-  Icon,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Text,
-} from '@chakra-ui/react';
+import { Center, Flex, Icon, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
 import { RiDeleteBinLine, RiLineChartLine, RiMore2Fill } from 'react-icons/ri';
+import type { VisualizationSpec } from 'react-vega';
 import { VegaLite } from 'react-vega';
-import type { TopLevelSpec as Spec } from 'vega-lite';
 
 interface ChartViewProps {
-  spec: Spec;
-  scores: {
+  spec: VisualizationSpec;
+  scores?: {
     importance: number;
     specificity: number;
     interestingness: number;
   };
 }
-const ChartView = (props: ChartViewProps) => {
-  const spec: Spec = {
-    mark: 'bar',
-    encoding: {
-      x: { field: 'a', type: 'ordinal' },
-      y: { field: 'b', type: 'quantitative' },
-    },
-    data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-  };
 
-  const barData = {
-    table: [
-      { a: 'A', b: 28 },
-      { a: 'B', b: 55 },
-      { a: 'C', b: 43 },
-      { a: 'D', b: 91 },
-      { a: 'E', b: 81 },
-      { a: 'F', b: 53 },
-      { a: 'G', b: 19 },
-      { a: 'H', b: 87 },
-      { a: 'I', b: 52 },
-    ],
-  };
-  //   return <VegaLite spec={spec} data={barData} actions={false} />;
+const ChartView = (props: ChartViewProps) => {
   return (
     <Flex
       flexDir={'column'}
       w={'full'}
-      h={'fit-content'}
       bgColor="white"
       borderRadius={'md'}
       boxShadow="sm"
@@ -68,13 +35,13 @@ const ChartView = (props: ChartViewProps) => {
           </MenuList>
         </Menu>
       </Flex>
-      <Center width={'full'}>
-        <VegaLite spec={spec} data={barData} actions={false} />
+      <Center height="full" px={4}>
+        <VegaLite width={350} height={200} spec={props.spec} actions={false} />
       </Center>
-      <Divider />
+      {/* <Divider />
       <Text>Importance</Text>
       <Text>Statistical Feature (Correlation, Ourlier, Skew, Kurosis, ANOVA, Chi-square)</Text>
-      <Text>Specified Wildcard</Text>
+      <Text>Specified Wildcard</Text> */}
     </Flex>
   );
 };
