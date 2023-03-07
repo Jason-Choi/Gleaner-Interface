@@ -1,9 +1,8 @@
 import { Button, Collapse, Flex, FlexProps, Heading, Icon, Link, Text } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useSignal } from '@preact/signals-react';
 import { AiFillGithub } from 'react-icons/ai';
 import { GiShipWheel } from 'react-icons/gi';
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
-import { useSignal } from '@preact/signals-react';
 
 const Header = () => {
   return (

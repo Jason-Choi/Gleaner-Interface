@@ -8,4 +8,6 @@ const weightSignal = signal<OracleWeight>({
     uniqueness: 1,
 });
 
-export { weightSignal }
+
+
+export { weightSignal };

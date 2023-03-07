@@ -13,6 +13,7 @@ interface ChartViewProps {
 }
 
 const ChartView = (props: ChartViewProps) => {
+  props.spec.autosize = { type: 'fit', contains: 'padding' };
   return (
     <Flex
       flexDir={'column'}
@@ -36,7 +37,7 @@ const ChartView = (props: ChartViewProps) => {
         </Menu>
       </Flex>
       <Center height="full" px={4}>
-        <VegaLite width={350} height={200} spec={props.spec} actions={false} />
+        <VegaLite height={200} width={350} spec={props.spec} actions={false} />
       </Center>
       {/* <Divider />
       <Text>Importance</Text>

@@ -1,7 +1,16 @@
 import { Button, Flex, Input, Select, SimpleGrid, Text, VStack } from '@chakra-ui/react';
 import { attributesSignal } from '../controller/attribute';
 import { chartTypesSignal } from '../controller/chartType';
-import { dashboardSignal } from '../controller/dashboard';
+import { createDashboard, dashboardSignal } from '../controller/dashboard';
+import {
+  numFiltersSignal,
+  numSampleSignal,
+  numVisSignal,
+  setNumFilters,
+  setNumSample,
+  setNumVis,
+} from '../controller/parameters';
+import { selectedTaskTypeSignal, taskTypesSignal } from '../controller/taskType';
 import Attribute from './AttributeSelector';
 import { ChartTypeSelector } from './ChartTypeSelector';
 import ChartView from './ChartView';
@@ -27,14 +36,25 @@ export const Main = () => {
           color="white"
           size="xs"
           w="full"
+          onClick={createDashboard}
         >
           Create Dashboard
         </Button>
 
         <Section title="Analytic Task" gap={1.5}>
-          <Select placeholder="Predefined Task" size="xs">
-            <option value="Compare">Compare</option>
-            <option value="Correlate">Correlate</option>
+          <Select
+            placeholder="User Task"
+            size="xs"
+            value={selectedTaskTypeSignal.value.name}
+            onChange={(e) => {
+              selectedTaskTypeSignal.value = taskTypesSignal.value.find(
+                (taskType) => taskType.name === e.target.value
+              )!;
+            }}
+          >
+            {taskTypesSignal.value.map((taskType, i) => (
+              <option key={`taskType-${i}`}>{taskType.name}</option>
+            ))}
           </Select>
 
           <WeightSlider title="specificity" />
@@ -42,17 +62,45 @@ export const Main = () => {
           <WeightSlider title="coverage" />
           <WeightSlider title="uniqueness" />
         </Section>
-        <Section title="Parameters" gap={1.5} collapsed w={200}>
+        <Section title="Parameters" gap={1.5} w={200}>
+          <Flex flexDir={'row'} justifyContent={'space-between'} align="center">
+            <Text fontSize={'xs'}># of Charts</Text>
+            <Input
+              size={'xs'}
+              width={10}
+              variant={'outline'}
+              value={numVisSignal.value}
+              onChange={(e) => {
+                setNumVis(parseInt(e.target.value));
+              }}
+            />
+          </Flex>
           <Flex flexDir={'row'} justifyContent={'space-between'} align="center">
             <Text fontSize={'xs'}># of Samples</Text>
-            <Input size={'xs'} width={10} variant={'outline'} value={12} />
+            <Input
+              size={'xs'}
+              width={10}
+              variant={'outline'}
+              value={numSampleSignal.value}
+              onChange={(e) => {
+                setNumSample(parseInt(e.target.value));
+              }}
+            />
           </Flex>
           <Flex flexDir={'row'} justifyContent={'space-between'} align="center">
             <Text fontSize={'xs'}># of Filters</Text>
-            <Input size={'xs'} width={10} variant={'outline'} value={1} />
+            <Input
+              size={'xs'}
+              width={10}
+              variant={'outline'}
+              value={numFiltersSignal.value}
+              onChange={(e) => {
+                setNumFilters(parseInt(e.target.value));
+              }}
+            />
           </Flex>
         </Section>
-        <Section title="Chart Types" gap={1.5} collapsed>
+        <Section title="Chart Types" gap={1.5}>
           {chartTypesSignal.value.map((chartType, i) => (
             <ChartTypeSelector chartType={chartType} key={`chartType-${i}`} />
           ))}

@@ -1,6 +1,7 @@
 import type { FlexProps } from '@chakra-ui/react';
 import { Flex, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text } from '@chakra-ui/react';
 import { weightSignal } from '../controller/oracleWeight';
+import { unSelectTaskType } from '../controller/taskType';
 
 interface WeightSliderProps extends FlexProps {
   title: 'coverage' | 'uniqueness' | 'interestingness' | 'specificity';
@@ -25,6 +26,7 @@ const WeightSlider = (props: WeightSliderProps) => {
         onChange={(value) => {
           weightSignal.value[props.title] = value;
           weightSignal.value = { ...weightSignal.value };
+          unSelectTaskType();
         }}
       >
         <SliderTrack bgColor={'orange'}>
