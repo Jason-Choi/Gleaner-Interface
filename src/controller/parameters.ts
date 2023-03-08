@@ -3,7 +3,7 @@ import { signal, computed } from '@preact/signals-react'
 const parametersSignal = signal({
     numVis: 12,
     numSample: 500,
-    numFilters: 2
+    numFilters: 0,
 })
 
 const numVisSignal = computed(() => parametersSignal.value.numVis)

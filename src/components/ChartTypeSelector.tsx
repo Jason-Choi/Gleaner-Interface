@@ -1,7 +1,7 @@
 import { Flex, Icon, Text } from '@chakra-ui/react';
 import {
-  RiCloseCircleFill,
-  RiCloseCircleLine,
+  RiCheckboxCircleFill,
+  RiCheckboxCircleLine,
   RiHeartAddFill,
   RiHeartAddLine,
 } from 'react-icons/ri';
@@ -16,9 +16,9 @@ export const ChartTypeSelector = ({ chartType }: { chartType: ChartType }) => {
         {chartType.name}
       </Text>
       <Icon
-        as={chartType.ignore ? RiCloseCircleFill : RiCloseCircleLine}
+        as={chartType.ignore ? RiCheckboxCircleLine : RiCheckboxCircleFill}
         boxSize={3.5}
-        color="red.300"
+        color="blue.400"
         ml={'auto'}
         mr={1}
         cursor="pointer"
@@ -27,7 +27,7 @@ export const ChartTypeSelector = ({ chartType }: { chartType: ChartType }) => {
       <Icon
         as={chartType.prefer ? RiHeartAddFill : RiHeartAddLine}
         boxSize={3.5}
-        color="pink.300"
+        color={chartType.ignore ? 'gray.400' : 'red.400'}
         cursor="pointer"
         onClick={() => toggleChartTypePrefer(chartType)}
       />

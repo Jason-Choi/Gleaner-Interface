@@ -24,7 +24,7 @@ const Header = () => {
 
 const Footer = () => {
   return (
-    <Flex mt="auto" align="center" py={2} px={4} flexDir="column" alignItems="start" bottom={0}>
+    <Flex mt="auto" align="center" py={4} px={4} flexDir="column" alignItems="start">
       <Link href="https://idclab.skku.edu" isExternal>
         <Flex>
           <Text variant={'layout'} fontFamily="Rajdhani" fontWeight={900} fontSize="xl">
@@ -65,6 +65,8 @@ const Section = (props: SectionProps) => {
     <Flex
       flexDir={'column'}
       w="full"
+      h={props.height}
+      minH={props.minH}
       gap={props.gap}
       p={2}
       bgColor="white"
@@ -73,7 +75,7 @@ const Section = (props: SectionProps) => {
     >
       <Flex flexDir={'row'} justifyContent={'space-between'} alignItems={'center'}>
         <Heading variant={'section'}>{props.title}</Heading>
-        {show ? (
+        {show.value ? (
           <Icon as={RiArrowDownSLine} boxSize={4} onClick={toggleShow} />
         ) : (
           <Icon as={RiArrowUpSLine} boxSize={4} onClick={toggleShow} />

@@ -23,7 +23,18 @@ const createDashboard = async () => {
     const response = await axios.post(`${URI}/create_dashboard`, body)
     const data: { result: Result } = response.data
 
-    dashboardSignal.value = data.result.vlspecs.map((vlSpec) => JSON.parse(vlSpec))
+    dashboardSignal.value = data.result.vlspecs.map((vlSpec) => {
+        const specObject = JSON.parse(vlSpec)
+        specObject.autosize = { type: 'fit', contains: 'padding' };
+        if (specObject.encoding && specObject.encoding.color) {
+            specObject.encoding.color.legend = { title: null };
+        }
+        return specObject
+    })
 }
 
-export { dashboardSignal, createDashboard }
+const removeChart = async (spec: VisualizationSpec) => {
+    dashboardSignal.value = dashboardSignal.peek().filter((s) => s !== spec)
+}
+
+export { dashboardSignal, createDashboard, removeChart }

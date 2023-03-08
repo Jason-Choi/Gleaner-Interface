@@ -14,20 +14,12 @@ import { selectedTaskTypeSignal, taskTypesSignal } from '../controller/taskType'
 import Attribute from './AttributeSelector';
 import { ChartTypeSelector } from './ChartTypeSelector';
 import ChartView from './ChartView';
-import { Section } from './Layout';
+import { Footer, Section } from './Layout';
 import WeightSlider from './WeightSlider';
 
 export const Main = () => {
   return (
-    <Flex
-      w="full"
-      minH="80vh"
-      flexDir={'row'}
-      justifyContent="space-between"
-      px={4}
-      gap={4}
-      mb={20}
-    >
+    <Flex w="full" minH="80vh" flexDir={'row'} justifyContent="space-between" px={4} gap={4}>
       <Flex flexDir={'column'} w={200} gap={2} h="fit-content">
         <Button
           boxShadow={'sm'}
@@ -112,13 +104,14 @@ export const Main = () => {
           ))}
         </Section>
       </Flex>
-      <SimpleGrid w="full" h="fit-content" spacing={4} minChildWidth={350} maxBlockSize={200}>
+      <SimpleGrid w="full" h="fit-content" spacing={4} minChildWidth={350}>
         {dashboardSignal.value.map((chart, i) => (
           <ChartView spec={chart} scores={undefined} key={`chart-${i}`} />
         ))}
       </SimpleGrid>
       <VStack w={300}>
-        <Section title="Recommend Chart" gap={1.5}></Section>
+        <Section title="Dashboard Info" gap={1.5} minH={200}></Section>
+        <Section title="Recommend Chart" gap={1.5} minH={700}></Section>
       </VStack>
     </Flex>
   );

@@ -43,7 +43,7 @@ const Attribute = ({ attribute }: { attribute: Attribute }) => {
       <Icon
         as={attribute.prefer ? RiHeartAddFill : RiHeartAddLine}
         boxSize={3.5}
-        color="pink.300"
+        color="pink.400"
         ml={'auto'}
         cursor="pointer"
         onClick={() => toggleAttributePrefer(attribute)}

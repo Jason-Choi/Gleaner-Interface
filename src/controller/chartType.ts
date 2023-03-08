@@ -19,6 +19,7 @@ const chartTypeWildcardSignal = computed(() =>
 );
 
 const toggleChartTypePrefer = (target: ChartType) => {
+    if (target.ignore) return;
     chartTypesSignal.value = chartTypesSignal.peek().map((chartType) => {
         if (chartType.name === target.name) {
             return {
@@ -35,8 +36,8 @@ const toggleChartTypeIgnore = (target: ChartType) => {
     unSelectTaskType();
     chartTypesSignal.value = chartTypesSignal.peek().map((chartType) => {
         if (chartType.name === target.name) {
-            console.log(chartType.name)
             chartType.ignore = !chartType.ignore;
+            if (chartType.ignore) chartType.prefer = false;
         }
         return chartType;
     });

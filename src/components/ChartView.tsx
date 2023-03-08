@@ -1,10 +1,12 @@
-import { Center, Flex, Icon, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
-import { RiDeleteBinLine, RiLineChartLine, RiMore2Fill } from 'react-icons/ri';
-import type { VisualizationSpec } from 'react-vega';
+import { Center, Flex, Icon, Text } from '@chakra-ui/react';
+import { RiDeleteBinLine } from 'react-icons/ri';
+import { TbExchange } from 'react-icons/tb';
 import { VegaLite } from 'react-vega';
+import { Handler } from 'vega-tooltip';
+import { removeChart } from '../controller/dashboard';
 
 interface ChartViewProps {
-  spec: VisualizationSpec;
+  spec: any;
   scores?: {
     importance: number;
     specificity: number;
@@ -13,7 +15,6 @@ interface ChartViewProps {
 }
 
 const ChartView = (props: ChartViewProps) => {
-  props.spec.autosize = { type: 'fit', contains: 'padding' };
   return (
     <Flex
       flexDir={'column'}
@@ -24,25 +25,33 @@ const ChartView = (props: ChartViewProps) => {
       p={2}
       gap={2}
     >
-      <Flex flexDir={'row'} justifyContent={'space-between'}>
-        <Text></Text>
-        <Menu>
-          <MenuButton>
-            <Icon as={RiMore2Fill} boxSize={4} />
-          </MenuButton>
-          <MenuList>
-            <MenuItem icon={<RiDeleteBinLine size={16} />}>Remove Chart</MenuItem>
-            <MenuItem icon={<RiLineChartLine size={16} />}>Related Chart</MenuItem>
-          </MenuList>
-        </Menu>
+      <Flex flexDir={'row'} justifyContent={'space-between'} align="center">
+        <Icon mr={4} as={TbExchange} boxSize={4} onClick={() => {}} />
+        <Text w="full" fontWeight={600} fontSize={'xs'} textAlign="center">
+          {props.spec.description}
+        </Text>
+        <Icon
+          ml={4}
+          as={RiDeleteBinLine}
+          boxSize={4}
+          onClick={() => {
+            removeChart(props.spec);
+          }}
+        />
       </Flex>
       <Center height="full" px={4}>
-        <VegaLite height={200} width={350} spec={props.spec} actions={false} />
+        <VegaLite
+          height={200}
+          width={350}
+          spec={props.spec}
+          actions={false}
+          tooltip={new Handler().call}
+        />
       </Center>
       {/* <Divider />
       <Text>Importance</Text>
       <Text>Statistical Feature (Correlation, Ourlier, Skew, Kurosis, ANOVA, Chi-square)</Text>
-      <Text>Specified Wildcard</Text> */}
+    <Text>Specified Wildcard</Text> */}
     </Flex>
   );
 };

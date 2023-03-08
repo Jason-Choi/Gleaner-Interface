@@ -29,8 +29,8 @@ const WeightSlider = (props: WeightSliderProps) => {
           unSelectTaskType();
         }}
       >
-        <SliderTrack bgColor={'orange'}>
-          <SliderFilledTrack bgColor={'blue.400'} />
+        <SliderTrack bgGradient={'linear(to-l, red.400, white)'}>
+          <SliderFilledTrack bgGradient={'linear(to-r, blue.400, white)'} />
         </SliderTrack>
         <SliderThumb />
       </Slider>
