@@ -41,7 +41,7 @@ const ChartView = ({ chart }: { chart: ChartView }) => {
           as={RiDeleteBinLine}
           boxSize={4}
           onClick={() => {
-            removeChart(chart.spec);
+            removeChart(chart.index);
           }}
         />
       </Flex>
