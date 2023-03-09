@@ -5,12 +5,21 @@ import { unSelectTaskType } from "./taskType";
 
 const attributesSignal = signal<Attribute[]>([]);
 
-const attributeWildcardsSignal = computed(() =>
+
+const attributePreferedSignal = computed(() =>
     attributesSignal
         .value
         .filter((attribute) => attribute.prefer)
-        .map((attribute) => `attr_${attribute.name}`)
+        .map((attribute) => attribute.name)
 );
+
+
+const attributeWildcardsSignal = computed(() =>
+    attributePreferedSignal
+        .value
+        .map((attribute) => `attr_${attribute}`)
+);
+
 
 const toggleAttributePrefer = (target: Attribute) => {
     unSelectTaskType();

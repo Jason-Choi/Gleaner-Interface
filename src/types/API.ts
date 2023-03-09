@@ -1,18 +1,22 @@
 import type { AttributeFetched } from './Attribute';
 import type { ChartTypeFetched } from './ChartType';
+import { StatisticFeature } from './ChartView';
 import type { OracleResult } from "./OracleResult";
 import type { OracleWeight } from "./OracleWeight";
 import { TaskTypeFetched } from './TaskType';
 
 
 interface Result {
-    numViews: number;
+    num_views: number;
     wildcards: string[];
     score: number;
-    oraclsResult: OracleResult;
-    oracleWeight: OracleWeight;
+    oracls_result: OracleResult;
+    oracle_weight: OracleWeight;
     vlspecs: string[];
+    indices: number[];
+    statistic_features: StatisticFeature[];
 }
+
 
 
 interface Init {
@@ -22,7 +26,8 @@ interface Init {
     result: Result;
 }
 
-interface CreateDashboardBody {
+interface SampleBody {
+    indices: number[]
     numVis: number
     numSample: number
     numFilter: number
@@ -31,4 +36,4 @@ interface CreateDashboardBody {
     wildcard: string[]
 }
 
-export type { Result, Init, CreateDashboardBody };
+export type { Result, Init, SampleBody };

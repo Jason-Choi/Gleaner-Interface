@@ -1,41 +1,47 @@
-import { Center, Flex, Icon, Text } from '@chakra-ui/react';
-import { RiDeleteBinLine } from 'react-icons/ri';
+import { Badge, Center, Divider, Flex, Icon, Text } from '@chakra-ui/react';
+import { RiDeleteBinLine, RiPushpinFill, RiPushpinLine } from 'react-icons/ri';
 import { TbExchange } from 'react-icons/tb';
 import { VegaLite } from 'react-vega';
 import { Handler } from 'vega-tooltip';
-import { removeChart } from '../controller/dashboard';
+import { removeChart, togglePinChart } from '../controller/dashboard';
+import type { ChartView } from '../types/ChartView';
 
-interface ChartViewProps {
-  spec: any;
-  scores?: {
-    importance: number;
-    specificity: number;
-    interestingness: number;
-  };
-}
+const StatisticFeatureBadge = ({ feature }: { feature: string | null }) => {
+  if (feature === null) return null;
+  return <Badge>{feature.replace('has_', '')}</Badge>;
+};
 
-const ChartView = (props: ChartViewProps) => {
+const ChartView = ({ chart }: { chart: ChartView }) => {
   return (
     <Flex
       flexDir={'column'}
       w={'full'}
+      h="fit-content"
       bgColor="white"
       borderRadius={'md'}
       boxShadow="sm"
       p={2}
       gap={2}
     >
-      <Flex flexDir={'row'} justifyContent={'space-between'} align="center">
-        <Icon mr={4} as={TbExchange} boxSize={4} onClick={() => {}} />
+      <Flex flexDir={'row'} justifyContent={'space-between'} align="top">
+        <Icon mr={2} as={TbExchange} boxSize={4} onClick={() => {}} />
+        <Icon
+          mr={4}
+          as={chart.isPinned ? RiPushpinFill : RiPushpinLine}
+          boxSize={4}
+          onClick={() => {
+            togglePinChart(chart.index);
+          }}
+        />
         <Text w="full" fontWeight={600} fontSize={'xs'} textAlign="center">
-          {props.spec.description}
+          {chart.spec.description}
         </Text>
         <Icon
           ml={4}
           as={RiDeleteBinLine}
           boxSize={4}
           onClick={() => {
-            removeChart(props.spec);
+            removeChart(chart.spec);
           }}
         />
       </Flex>
@@ -43,15 +49,25 @@ const ChartView = (props: ChartViewProps) => {
         <VegaLite
           height={200}
           width={350}
-          spec={props.spec}
+          spec={chart.spec}
           actions={false}
           tooltip={new Handler().call}
         />
       </Center>
-      {/* <Divider />
-      <Text>Importance</Text>
-      <Text>Statistical Feature (Correlation, Ourlier, Skew, Kurosis, ANOVA, Chi-square)</Text>
-    <Text>Specified Wildcard</Text> */}
+      <Divider />
+      {Object.keys(chart.statistic_feature).map((key) => {
+        if (chart.statistic_feature[key].filter((f) => f !== null).length === 0) return null;
+        return (
+          <Flex gap={1}>
+            <Text fontSize={'xs'} textAlign="center" fontWeight={400} mr="auto">
+              {key.replace("['", '').replace("']", '').replace("', '", ' & ')}
+            </Text>
+            {chart.statistic_feature[key].map((feature) => (
+              <StatisticFeatureBadge feature={feature} />
+            ))}
+          </Flex>
+        );
+      })}
     </Flex>
   );
 };

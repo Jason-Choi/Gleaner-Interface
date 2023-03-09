@@ -1,40 +1,80 @@
-import { signal } from '@preact/signals-react'
-import axios from 'axios'
-import { VisualizationSpec } from 'react-vega'
-import { URI } from '../../config'
-import type { CreateDashboardBody, Result } from '../types/API'
-import { attributeWildcardsSignal } from './attribute'
-import { chartTypeWildcardSignal, targetChartTypeSignal } from './chartType'
-import { weightSignal } from './oracleWeight'
-import { numFiltersSignal, numSampleSignal, numVisSignal } from './parameters'
+import { computed, signal } from '@preact/signals-react';
+import axios from 'axios';
+import { URI } from '../../config';
+import type { Result, SampleBody } from '../types/API';
+import { ChartView } from '../types/ChartView';
+import { attributeWildcardsSignal } from './attribute';
+import { chartTypeWildcardSignal, targetChartTypeSignal } from './chartType';
+import { weightSignal } from './oracleWeight';
+import { numFiltersSignal, numSampleSignal, numVisSignal } from './parameters';
 
-const dashboardSignal = signal<VisualizationSpec[]>([])
+const dashboardSignal = signal<ChartView[]>([]);
 
-const createDashboard = async () => {
-    const body: CreateDashboardBody = {
-        numVis: numVisSignal.peek(),
-        numSample: numSampleSignal.peek(),
-        numFilter: numFiltersSignal.peek(),
-        weight: weightSignal.peek(),
-        chartTypes: targetChartTypeSignal.peek(),
-        wildcard: [...chartTypeWildcardSignal.peek(), ...attributeWildcardsSignal.peek()],
-    }
-    console.log(body)
-    const response = await axios.post(`${URI}/create_dashboard`, body)
-    const data: { result: Result } = response.data
+const isProcessingSignal = signal<boolean>(false);
 
-    dashboardSignal.value = data.result.vlspecs.map((vlSpec) => {
-        const specObject = JSON.parse(vlSpec)
+const pinnedChartSignal = computed<number[]>(() =>
+    dashboardSignal.value.filter((chart) => chart.isPinned).map((chart) => chart.index)
+);
+
+
+const sampleBodySignal = computed<SampleBody>(() => {
+    return {
+        indices: pinnedChartSignal.value,
+        numVis: numVisSignal.value,
+        numSample: numSampleSignal.value,
+        numFilter: numFiltersSignal.value,
+        weight: weightSignal.value,
+        chartTypes: targetChartTypeSignal.value,
+        wildcard: [...chartTypeWildcardSignal.value, ...attributeWildcardsSignal.value],
+    };
+});
+
+const setDashboardSignalFromResult = (result: Result) => {
+    dashboardSignal.value = result.vlspecs.map((vlSpec, i) => {
+        const specObject = JSON.parse(vlSpec);
+
         specObject.autosize = { type: 'fit', contains: 'padding' };
         if (specObject.encoding && specObject.encoding.color) {
             specObject.encoding.color.legend = { title: null };
         }
-        return specObject
-    })
-}
 
-const removeChart = async (spec: VisualizationSpec) => {
-    dashboardSignal.value = dashboardSignal.peek().filter((s) => s !== spec)
-}
+        return {
+            index: result.indices[i],
+            spec: specObject,
+            isPinned: pinnedChartSignal.peek().includes(result.indices[i]),
+            statistic_feature: result.statistic_features[i],
+        };
+    });
+};
 
-export { dashboardSignal, createDashboard, removeChart }
+const sampleDashboard = async () => {
+    console.log(sampleBodySignal.peek());
+    const response = await axios.post(`${URI}/sample`, sampleBodySignal.peek());
+    setDashboardSignalFromResult(response.data.result as Result);
+    isProcessingSignal.value = false;
+};
+
+const removeChart = (index: number) => {
+    dashboardSignal.value = dashboardSignal.peek().filter((s) => s.index !== index);
+};
+
+const togglePinChart = (index: number) => {
+    dashboardSignal.value = dashboardSignal.peek().map((s) => {
+        if (s.index === index)
+            return {
+                ...s,
+                isPinned: !s.isPinned,
+            };
+        return s;
+    });
+};
+
+export {
+    dashboardSignal,
+    sampleDashboard,
+    removeChart,
+    togglePinChart,
+    sampleBodySignal,
+    setDashboardSignalFromResult,
+    isProcessingSignal
+};

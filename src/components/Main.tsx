@@ -1,7 +1,8 @@
 import { Button, Flex, Input, Select, SimpleGrid, Text, VStack } from '@chakra-ui/react';
+import { useRef } from 'react';
 import { attributesSignal } from '../controller/attribute';
 import { chartTypesSignal } from '../controller/chartType';
-import { createDashboard, dashboardSignal } from '../controller/dashboard';
+import { dashboardSignal, isProcessingSignal, sampleDashboard } from '../controller/dashboard';
 import {
   numFiltersSignal,
   numSampleSignal,
@@ -14,23 +15,35 @@ import { selectedTaskTypeSignal, taskTypesSignal } from '../controller/taskType'
 import Attribute from './AttributeSelector';
 import { ChartTypeSelector } from './ChartTypeSelector';
 import ChartView from './ChartView';
-import { Footer, Section } from './Layout';
+import { Section } from './Layout';
 import WeightSlider from './WeightSlider';
 
 export const Main = () => {
+  const numChartRef = useRef<HTMLInputElement>(null);
+  const numSampleRef = useRef<HTMLInputElement>(null);
+  const numFilterRef = useRef<HTMLInputElement>(null);
+
   return (
     <Flex w="full" minH="80vh" flexDir={'row'} justifyContent="space-between" px={4} gap={4}>
       <Flex flexDir={'column'} w={200} gap={2} h="fit-content">
         <Button
           boxShadow={'sm'}
           colorScheme="blue"
-          bgColor="#5677A4"
           color="white"
+          loadingText="Processing..."
           size="xs"
+          bgColor="#5677A4"
           w="full"
-          onClick={createDashboard}
+          isLoading={isProcessingSignal.value ? true : false}
+          onClick={() => {
+            isProcessingSignal.value = true;
+            setNumVis(parseInt(numChartRef.current!.value));
+            setNumSample(parseInt(numSampleRef.current!.value));
+            setNumFilters(parseInt(numFilterRef.current!.value));
+            sampleDashboard();
+          }}
         >
-          Create Dashboard
+          {isProcessingSignal.value ? 'Processing...' : 'Run'}
         </Button>
 
         <Section title="Analytic Task" gap={1.5}>
@@ -59,36 +72,30 @@ export const Main = () => {
             <Text fontSize={'xs'}># of Charts</Text>
             <Input
               size={'xs'}
-              width={10}
+              width={12}
               variant={'outline'}
-              value={numVisSignal.value}
-              onChange={(e) => {
-                setNumVis(parseInt(e.target.value));
-              }}
+              defaultValue={numVisSignal.value}
+              ref={numChartRef}
             />
           </Flex>
           <Flex flexDir={'row'} justifyContent={'space-between'} align="center">
             <Text fontSize={'xs'}># of Samples</Text>
             <Input
               size={'xs'}
-              width={10}
+              width={12}
               variant={'outline'}
-              value={numSampleSignal.value}
-              onChange={(e) => {
-                setNumSample(parseInt(e.target.value));
-              }}
+              defaultValue={numSampleSignal.value}
+              ref={numSampleRef}
             />
           </Flex>
           <Flex flexDir={'row'} justifyContent={'space-between'} align="center">
             <Text fontSize={'xs'}># of Filters</Text>
             <Input
               size={'xs'}
-              width={10}
+              width={12}
               variant={'outline'}
-              value={numFiltersSignal.value}
-              onChange={(e) => {
-                setNumFilters(parseInt(e.target.value));
-              }}
+              ref={numFilterRef}
+              defaultValue={numFiltersSignal.value}
             />
           </Flex>
         </Section>
@@ -106,7 +113,7 @@ export const Main = () => {
       </Flex>
       <SimpleGrid w="full" h="fit-content" spacing={4} minChildWidth={350}>
         {dashboardSignal.value.map((chart, i) => (
-          <ChartView spec={chart} scores={undefined} key={`chart-${i}`} />
+          <ChartView chart={chart} key={`chart-${i}`} />
         ))}
       </SimpleGrid>
       <VStack w={300}>

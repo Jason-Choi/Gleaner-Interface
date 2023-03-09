@@ -1,28 +1,18 @@
-import { signal, effect, batch } from '@preact/signals-react'
-import { URI } from '../../config'
+import { batch, effect, signal } from '@preact/signals-react'
 import axios from "axios"
-import { CreateDashboardBody, Init } from '../types/API'
-import { attributesSignal, attributeWildcardsSignal } from './attribute'
-import { chartTypesSignal, chartTypeWildcardSignal, targetChartTypeSignal } from './chartType'
-import { dashboardSignal } from './dashboard'
-import { selectedTaskTypeSignal, taskTypesSignal } from './taskType'
+import { URI } from '../../config'
+import { Init } from '../types/API'
 import { ChartType } from '../types/ChartType'
-import { numFiltersSignal, numSampleSignal, numVisSignal } from './parameters'
-import { weightSignal } from './oracleWeight'
+import { attributesSignal } from './attribute'
+import { chartTypesSignal } from './chartType'
+import { sampleBodySignal, setDashboardSignalFromResult } from './dashboard'
+import { selectedTaskTypeSignal, taskTypesSignal } from './taskType'
 
-const initializedSignal = signal<boolean>(false)
+const initializedSignal = signal<boolean>(false);
 
 
-effect(async () => {
-    const body: CreateDashboardBody = {
-        numVis: numVisSignal.peek(),
-        numSample: numSampleSignal.peek(),
-        numFilter: numFiltersSignal.peek(),
-        weight: weightSignal.peek(),
-        chartTypes: targetChartTypeSignal.peek(),
-        wildcard: [],
-    }
-    const response = await axios.post(`${URI}/init`, body);
+(effect(async () => {
+    const response = await axios.post(`${URI}/init`, sampleBodySignal.peek());
     const data: Init = response.data;
     batch(() => {
         initializedSignal.value = true;
@@ -46,18 +36,10 @@ effect(async () => {
                 chartTypes: taskType.chartTypes.map((chartType) => chartTypesSignal.peek().find((ct) => ct.name === chartType.name) as ChartType),
             };
         });
-
-        dashboardSignal.value = data.result.vlspecs.map((vlSpec) => {
-            const specObject = JSON.parse(vlSpec)
-            specObject.autosize = { type: 'fit', contains: 'padding' };
-            if (specObject.encoding && specObject.encoding.color) {
-                specObject.encoding.color.legend = { title: null };
-            }
-            return specObject
-        })
+        setDashboardSignalFromResult(data.result);
         selectedTaskTypeSignal.value = { ...selectedTaskTypeSignal.peek(), chartTypes: chartTypesSignal.peek() }
     });
-})
+}))();
 
 
 export { initializedSignal }

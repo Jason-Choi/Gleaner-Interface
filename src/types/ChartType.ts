@@ -9,4 +9,4 @@ interface ChartType extends ChartTypeFetched {
 }
 
 
-export type { ChartTypeFetched, ChartType }
+export type { ChartTypeFetched, ChartType };

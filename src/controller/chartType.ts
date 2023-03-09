@@ -5,15 +5,11 @@ import { unSelectTaskType } from './taskType';
 const chartTypesSignal = signal<ChartType[]>([]);
 
 const targetChartTypeSignal = computed(() =>
-    chartTypesSignal
-        .value
-        .filter((chartType) => !chartType.ignore)
-        .map((chartType) => chartType.mark)
+    chartTypesSignal.value.filter((chartType) => !chartType.ignore).map((chartType) => chartType.mark)
 );
 
 const chartTypeWildcardSignal = computed(() =>
-    chartTypesSignal
-        .value
+    chartTypesSignal.value
         .filter((chartType) => chartType.prefer)
         .map((chartType) => `${chartType.name}`)
 );
