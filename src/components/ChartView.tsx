@@ -10,8 +10,12 @@ const StatisticFeatureBadge = ({ feature }: { feature: string | null }) => {
   if (feature === null) return null;
   return <Badge>{feature.replace('has_', '')}</Badge>;
 };
-
-const ChartView = ({ chart }: { chart: ChartView }) => {
+interface ChartViewProps {
+  chart: ChartView;
+  width: number;
+  height: number;
+}
+const ChartView = ({ chart, width, height }: ChartViewProps) => {
   return (
     <Flex
       flexDir={'column'}
@@ -47,8 +51,8 @@ const ChartView = ({ chart }: { chart: ChartView }) => {
       </Flex>
       <Center height="full" px={4}>
         <VegaLite
-          height={200}
-          width={350}
+          height={height}
+          width={width}
           spec={chart.spec}
           actions={false}
           tooltip={new Handler().call}

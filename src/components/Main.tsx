@@ -113,7 +113,7 @@ export const Main = () => {
       </Flex>
       <SimpleGrid w="full" h="fit-content" spacing={4} minChildWidth={350}>
         {dashboardSignal.value.map((chart, i) => (
-          <ChartView chart={chart} key={`chart-${i}`} />
+          <ChartView chart={chart} key={`chart-${i}`} width={350} height={150} />
         ))}
       </SimpleGrid>
       <VStack w={300}>
