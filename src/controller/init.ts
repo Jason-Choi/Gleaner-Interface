@@ -5,7 +5,7 @@ import { Init } from '../types/API'
 import { ChartType } from '../types/ChartType'
 import { attributesSignal } from './attribute'
 import { chartTypesSignal } from './chartType'
-import { sampleBodySignal, setDashboardSignalFromResult } from './dashboard'
+import { resultSignal, sampleBodySignal } from './dashboard'
 import { selectedTaskTypeSignal, taskTypesSignal } from './taskType'
 
 const initializedSignal = signal<boolean>(false);
@@ -36,7 +36,7 @@ const initializedSignal = signal<boolean>(false);
                 chartTypes: taskType.chartTypes.map((chartType) => chartTypesSignal.peek().find((ct) => ct.name === chartType.name) as ChartType),
             };
         });
-        setDashboardSignalFromResult(data.result);
+        resultSignal.value = data.result;
         selectedTaskTypeSignal.value = { ...selectedTaskTypeSignal.peek(), chartTypes: chartTypesSignal.peek() }
     });
 }))();

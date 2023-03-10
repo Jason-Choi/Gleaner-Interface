@@ -2,19 +2,16 @@ import type { AttributeFetched } from './Attribute';
 import type { ChartTypeFetched } from './ChartType';
 import { StatisticFeature } from './ChartView';
 import type { OracleResult } from "./OracleResult";
-import type { OracleWeight } from "./OracleWeight";
+import { OracleWeight } from './OracleWeight';
 import { TaskTypeFetched } from './TaskType';
 
 
 interface Result {
-    num_views: number;
-    wildcards: string[];
-    score: number;
-    oracls_result: OracleResult;
-    oracle_weight: OracleWeight;
-    vlspecs: string[];
     indices: number[];
+    vlspecs: string[];
     statistic_features: StatisticFeature[];
+    result: OracleResult;
+    sampled_results: OracleResult[];
 }
 
 
@@ -31,7 +28,7 @@ interface SampleBody {
     numVis: number
     numSample: number
     numFilter: number
-    weight: OracleResult
+    weight: OracleWeight
     chartTypes: string[]
     wildcard: string[]
 }

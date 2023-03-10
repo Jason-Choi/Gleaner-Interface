@@ -6,7 +6,7 @@ interface StatisticFeature {
 
 interface ChartView {
     index: number;
-    spec: VisualizationSpec | any;
+    spec: unknown;
     isPinned: boolean;
     statistic_feature: StatisticFeature;
 }
