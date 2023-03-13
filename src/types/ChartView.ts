@@ -4,11 +4,17 @@ interface StatisticFeature {
     [key: string]: (string | null)[]
 }
 
-interface ChartView {
-    index: number;
-    spec: unknown;
-    isPinned: boolean;
-    statistic_feature: StatisticFeature;
+interface TitleToken {
+    text: string;
+    isPrefered: boolean;
 }
 
-export type { ChartView, StatisticFeature };
+interface ChartView {
+    index: number;
+    spec: VisualizationSpec | any;
+    isPinned: boolean;
+    statistic_feature: StatisticFeature;
+    title: TitleToken[];
+}
+
+export type { ChartView, StatisticFeature, TitleToken };

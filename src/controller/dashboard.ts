@@ -1,9 +1,10 @@
-import { computed, signal, ReadonlySignal } from '@preact/signals-react';
+import { computed, signal, ReadonlySignal, effect } from '@preact/signals-react';
 import axios from 'axios';
 import { URI } from '../../config';
 import type { Result, SampleBody } from '../types/API';
-import { ChartView } from '../types/ChartView';
-import { attributeWildcardsSignal } from './attribute';
+import { ChartView, TitleToken } from '../types/ChartView';
+import { OracleResult } from '../types/OracleResult';
+import { attributePreferedSignal, attributeWildcardsSignal } from './attribute';
 import { chartTypeWildcardSignal, targetChartTypeSignal } from './chartType';
 import { weightSignal } from './oracleWeight';
 import { numFiltersSignal, numSampleSignal, numVisSignal } from './parameters';
@@ -22,6 +23,30 @@ const resultSignal = signal<Result>({
     sampled_results: [],
 });
 
+const resultDistributionSignal = computed(() => {
+    const sampled_results = resultSignal.value.sampled_results;
+    return {
+        score: sampled_results.map((sample) => sample.score),
+        uniqueness: sampled_results.map((sample) => sample.uniqueness),
+        coverage: sampled_results.map((sample) => sample.coverage),
+        specificity: sampled_results.map((sample) => sample.specificity),
+        interestingness: sampled_results.map((sample) => sample.interestingness),
+    }
+});
+
+const currentScoreSignal = signal<OracleResult>({
+    score: 0,
+    uniqueness: 0,
+    coverage: 0,
+    specificity: 0,
+    interestingness: 0,
+})
+
+effect(() => {
+    currentScoreSignal.value = resultSignal.value.result;
+})
+
+
 const dashboardSignal: ReadonlySignal<ChartView[]> = computed<ChartView[]>(() => {
     const vlSpecs = resultSignal.value.vlspecs;
     const indices = resultSignal.value.indices;
@@ -29,6 +54,14 @@ const dashboardSignal: ReadonlySignal<ChartView[]> = computed<ChartView[]>(() =>
 
     return vlSpecs.map((vlSpec, i) => {
         const specObject = JSON.parse(vlSpec);
+        const title: string[] = JSON.parse(specObject.description);
+        const titleToken: TitleToken[] = title.map((t) => {
+            return {
+                text: t,
+                isPrefered: attributePreferedSignal.value.includes(t),
+            }
+        });
+
         specObject.autosize = { type: 'fit', contains: 'padding' };
         if (specObject.encoding && specObject.encoding.color) {
             specObject.encoding.color.legend = { title: null };
@@ -38,6 +71,7 @@ const dashboardSignal: ReadonlySignal<ChartView[]> = computed<ChartView[]>(() =>
             spec: specObject,
             isPinned: pinnedIndicesSignal.value.includes(indices[i]),
             statistic_feature: statistic_features[i],
+            title: titleToken,
         } as ChartView;
     });
 });
@@ -91,4 +125,6 @@ export {
     togglePinChart,
     sampleBodySignal,
     isProcessingSignal,
+    currentScoreSignal,
+    resultDistributionSignal,
 };

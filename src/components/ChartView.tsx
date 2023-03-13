@@ -37,8 +37,18 @@ const ChartView = ({ chart, width, height }: ChartViewProps) => {
             togglePinChart(chart.index);
           }}
         />
-        <Text w="full" fontWeight={600} fontSize={'xs'} textAlign="center">
-          {chart.spec.description}
+        <Text w="full" fontSize={'xs'} textAlign="center">
+          {chart.title.map((t) =>
+            t.isPrefered ? (
+              <Text as="span" fontWeight={800} color="pink.400">
+                {`${t.text} `}
+              </Text>
+            ) : (
+              <Text as="span" fontWeight={500}>
+                {`${t.text} `}
+              </Text>
+            )
+          )}
         </Text>
         <Icon
           ml={4}

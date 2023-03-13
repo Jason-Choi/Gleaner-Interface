@@ -35,6 +35,6 @@ const toggleAttributePrefer = (target: Attribute) => {
 };
 
 
-export { attributesSignal, attributeWildcardsSignal, toggleAttributePrefer };
+export { attributesSignal, attributePreferedSignal, attributeWildcardsSignal, toggleAttributePrefer };
 
 

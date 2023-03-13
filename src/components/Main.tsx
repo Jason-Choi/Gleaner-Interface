@@ -2,7 +2,12 @@ import { Button, Flex, Input, Select, SimpleGrid, Text, VStack } from '@chakra-u
 import { useRef } from 'react';
 import { attributesSignal } from '../controller/attribute';
 import { chartTypesSignal } from '../controller/chartType';
-import { dashboardSignal, isProcessingSignal, sampleDashboard } from '../controller/dashboard';
+import {
+  currentScoreSignal,
+  dashboardSignal,
+  isProcessingSignal,
+  sampleDashboard,
+} from '../controller/dashboard';
 import {
   numFiltersSignal,
   numSampleSignal,
@@ -16,6 +21,7 @@ import Attribute from './AttributeSelector';
 import { ChartTypeSelector } from './ChartTypeSelector';
 import ChartView from './ChartView';
 import { Section } from './Layout';
+import { ResultPlot } from './ResultPlot';
 import WeightSlider from './WeightSlider';
 
 export const Main = () => {
@@ -104,7 +110,6 @@ export const Main = () => {
             <ChartTypeSelector chartType={chartType} key={`chartType-${i}`} />
           ))}
         </Section>
-
         <Section title="Attributes" gap={1.5} w={200}>
           {attributesSignal.value.map((attribute, i) => (
             <Attribute attribute={attribute} key={`attribute-${i}`} />
@@ -117,7 +122,13 @@ export const Main = () => {
         ))}
       </SimpleGrid>
       <VStack w={300}>
-        <Section title="Dashboard Info" gap={1.5} minH={200}></Section>
+        <Section title="Dashboard Info" gap={1.5} minH={200}>
+          <ResultPlot width={300} height={20} target="score" />
+          <ResultPlot width={300} height={20} target="specificity" />
+          <ResultPlot width={300} height={20} target="interestingness" />
+          <ResultPlot width={300} height={20} target="coverage" />
+          <ResultPlot width={300} height={20} target="uniqueness" />
+        </Section>
         <Section title="Recommend Chart" gap={1.5} minH={700}></Section>
       </VStack>
     </Flex>
