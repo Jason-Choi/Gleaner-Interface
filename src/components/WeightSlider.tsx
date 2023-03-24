@@ -1,5 +1,5 @@
 import type { FlexProps } from '@chakra-ui/react';
-import { Flex, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text } from '@chakra-ui/react';
+import { Flex, Slider, SliderThumb, SliderTrack, Text } from '@chakra-ui/react';
 import { weightSignal } from '../controller/oracleWeight';
 import { unSelectTaskType } from '../controller/taskType';
 
@@ -19,8 +19,8 @@ const WeightSlider = (props: WeightSliderProps) => {
       <Slider
         aria-label={`slider-ex-${props.title}`}
         value={weightSignal.value[props.title]}
-        min={-2}
-        max={2}
+        min={-3}
+        max={3}
         step={1}
         width={'full'}
         onChange={(value) => {

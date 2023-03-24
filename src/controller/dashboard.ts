@@ -1,4 +1,4 @@
-import { computed, signal, ReadonlySignal, effect } from '@preact/signals-react';
+import { computed, effect, ReadonlySignal, signal } from '@preact/signals-react';
 import axios from 'axios';
 import { URI } from '../../config';
 import type { Result, SampleBody } from '../types/API';
@@ -86,14 +86,13 @@ const sampleBodySignal = computed<SampleBody>(() => {
         numVis: numVisSignal.value,
         numSample: numSampleSignal.value,
         numFilter: numFiltersSignal.value,
-        weight: weightSignal.value,
+        weight: weightSignal.peek(),
         chartTypes: targetChartTypeSignal.value,
         wildcard: [...chartTypeWildcardSignal.value, ...attributeWildcardsSignal.value],
     };
 });
 
 const sampleDashboard = async () => {
-    console.log(sampleBodySignal.peek());
     const response = await axios.post(`${URI}/sample`, sampleBodySignal.peek());
     resultSignal.value = response.data.result as Result;
     isProcessingSignal.value = false;

@@ -1,4 +1,4 @@
-import { effect, signal } from '@preact/signals-react';
+import { batch, effect, signal } from '@preact/signals-react';
 import { TaskType } from '../types/TaskType';
 import { chartTypesSignal } from './chartType';
 import { weightSignal } from './oracleWeight';
@@ -28,25 +28,27 @@ const unSelectTaskType = () => {
 
 // Effect when selectedTaskTypeSignal changes
 effect(() => {
-    weightSignal.value = selectedTaskTypeSignal.value.weight;
+    batch(() => {
+        weightSignal.value = selectedTaskTypeSignal.value.weight;
 
-    if (selectedTaskTypeSignal.value.name === defaultTaskType.name) return;
+        if (selectedTaskTypeSignal.value.name === defaultTaskType.name) return;
 
-    chartTypesSignal.value = chartTypesSignal.peek().map((chartType) => {
-        if (
-            selectedTaskTypeSignal.value.chartTypes.some(
-                (selectedChartType) => selectedChartType.name === chartType.name
-            )
-        ) {
+        chartTypesSignal.value = chartTypesSignal.peek().map((chartType) => {
+            if (
+                selectedTaskTypeSignal.value.chartTypes.some(
+                    (selectedChartType) => selectedChartType.name === chartType.name
+                )
+            ) {
+                return {
+                    ...chartType,
+                    ignore: false,
+                };
+            }
             return {
                 ...chartType,
-                ignore: false,
+                ignore: true,
             };
-        }
-        return {
-            ...chartType,
-            ignore: true,
-        };
+        });
     });
 });
 

@@ -1,4 +1,4 @@
-import { signal, computed } from '@preact/signals-react'
+import { computed, signal } from '@preact/signals-react'
 
 const parametersSignal = signal({
     numVis: 12,

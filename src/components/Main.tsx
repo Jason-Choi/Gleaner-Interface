@@ -1,4 +1,5 @@
 import { Button, Flex, Input, Select, SimpleGrid, Text, VStack } from '@chakra-ui/react';
+import { batch } from '@preact/signals-react';
 import { useRef } from 'react';
 import { attributesSignal } from '../controller/attribute';
 import { chartTypesSignal } from '../controller/chartType';
@@ -28,7 +29,7 @@ export const Main = () => {
   const numChartRef = useRef<HTMLInputElement>(null);
   const numSampleRef = useRef<HTMLInputElement>(null);
   const numFilterRef = useRef<HTMLInputElement>(null);
-
+  console.log('main');
   return (
     <Flex w="full" minH="80vh" flexDir={'row'} justifyContent="space-between" px={4} gap={4}>
       <Flex flexDir={'column'} w={200} gap={2} h="fit-content">
@@ -43,10 +44,12 @@ export const Main = () => {
           isLoading={isProcessingSignal.value ? true : false}
           onClick={() => {
             isProcessingSignal.value = true;
-            setNumVis(parseInt(numChartRef.current!.value));
-            setNumSample(parseInt(numSampleRef.current!.value));
-            setNumFilters(parseInt(numFilterRef.current!.value));
-            sampleDashboard();
+            batch(() => {
+              setNumVis(parseInt(numChartRef.current!.value));
+              setNumSample(parseInt(numSampleRef.current!.value));
+              setNumFilters(parseInt(numFilterRef.current!.value));
+              sampleDashboard();
+            });
           }}
         >
           {isProcessingSignal.value ? 'Processing...' : 'Run'}
@@ -124,7 +127,9 @@ export const Main = () => {
       <VStack w={300}>
         <Section title="Dashboard Info" gap={1.5} minH={200}>
           <ResultPlot width={300} height={20} target="score" />
-          <ResultPlot width={300} height={20} target="specificity" />
+          {currentScoreSignal.value.specificity !== 0 ? (
+            <ResultPlot width={300} height={20} target="specificity" />
+          ) : null}
           <ResultPlot width={300} height={20} target="interestingness" />
           <ResultPlot width={300} height={20} target="coverage" />
           <ResultPlot width={300} height={20} target="uniqueness" />

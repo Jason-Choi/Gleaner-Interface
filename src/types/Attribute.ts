@@ -7,4 +7,4 @@ interface Attribute extends AttributeFetched {
     prefer: boolean;
 }
 
-export type { AttributeFetched, Attribute }
+export type { AttributeFetched, Attribute };

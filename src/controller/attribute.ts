@@ -1,4 +1,4 @@
-import { signal, computed } from "@preact/signals-react";
+import { computed, signal } from "@preact/signals-react";
 import { Attribute } from "../types/Attribute";
 import { unSelectTaskType } from "./taskType";
 
