@@ -124,7 +124,7 @@ export const Main = () => {
           <ChartView chart={chart} key={`chart-${i}`} width={350} height={150} />
         ))}
       </SimpleGrid>
-      <VStack w={300}>
+      {/* <VStack w={300}>
         <Section title="Dashboard Info" gap={1.5} minH={200}>
           <ResultPlot width={300} height={20} target="score" />
           {currentScoreSignal.value.specificity !== 0 ? (
@@ -135,7 +135,7 @@ export const Main = () => {
           <ResultPlot width={300} height={20} target="uniqueness" />
         </Section>
         <Section title="Recommend Chart" gap={1.5} minH={700}></Section>
-      </VStack>
+      </VStack> */}
     </Flex>
   );
 };
