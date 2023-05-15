@@ -1,4 +1,4 @@
-const URI = "https://idclab.jasonchoi.dev:3000/5001"
+const URI = "http://localhost:3000/5001"
 
 
 export { URI }
