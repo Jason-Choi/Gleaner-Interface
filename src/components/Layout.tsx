@@ -1,16 +1,16 @@
 import { Button, Collapse, Flex, FlexProps, Heading, Icon, Link, Text } from '@chakra-ui/react';
 import { useSignal } from '@preact/signals-react';
 import { AiFillGithub } from 'react-icons/ai';
-import { GiShipWheel } from 'react-icons/gi';
+import { GiWheat } from 'react-icons/gi';
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 
 const Header = () => {
   return (
     <Flex align="center" justifyContent="space-between" px={4} py={2}>
       <Flex alignItems={'center'}>
-        <Icon as={GiShipWheel} mr={1} boxSize={6} color="gray.500" />
+        <Icon as={GiWheat} mr={1} boxSize={6} color="gray.500" />
         <Heading size="md" variant={'layout'} alignItems="center">
-          VisTiller
+          Gleaner
         </Heading>
       </Flex>
       <Link href="https://github.com/jason-choi/vis-tiller" isExternal>
